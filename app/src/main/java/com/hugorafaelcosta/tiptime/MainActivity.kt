@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hugorafaelcosta.tiptime.databinding.ActivityMainBinding
 import java.text.NumberFormat
 
-lateinit var binding: ActivityMainBinding
+private lateinit var binding: ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,13 +15,16 @@ class MainActivity : AppCompatActivity() {
         binding.calculateButton.setOnClickListener { calculateTip() }
     }
 
-    fun calculateTip() {
+    private fun calculateTip() {
         val strinIntTextField = binding.costOfService.text.toString()
-        val cost = strinIntTextField.toDouble()
-        val selectedId = binding.tipOptions.checkedRadioButtonId
+        val cost = strinIntTextField.toDoubleOrNull()
+        if (cost == null) {
+            binding.tipResult.text = ""
+            return
+        }
 
 
-        val tipPercentage = when (selectedId) {
+        val tipPercentage = when (binding.tipOptions.checkedRadioButtonId) {
             R.id.option_twenty_percent -> 0.20
             R.id.option_eighteen_percent -> 0.18
             else -> 0.15
